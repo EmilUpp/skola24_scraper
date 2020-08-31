@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Select</title>
+</head>
+<body>
+<form action="/" method="post">
+    <select name="school">
+        {% for school in schools %}
+        <option style="font-size:20;" value="{{school}}">{{school}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Select School">
+</form>
+</body>
+</html>

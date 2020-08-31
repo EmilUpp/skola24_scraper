@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="60">
+    <title>Skola24 Empty Rooms</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body onload="setMenuTime()">
+    <div class="page-header" style="overflow: hidden;">
+        <h1 style="float: left;margin-left: 40%;">Skola24 - Tomma Rum</h1>
+        <h1 style="float: right;margin-right:10px;vertical-align: top;">Time: <span id ="clockbox"></span></h1>
+    </div>
+    <ul class="sidebar">
+        <li><a href="http://127.0.0.1:5000" id="pickPage">Pick new school</a></li>
+        <li><a href="http://127.0.0.1:5000/about" id="aboutPage">About</a></li>
+        <li><a href="http://127.0.0.1:5000/contact" id="contactPage">Contact</a></li>
+        <form class="time_set" method="post" onsubmit="return storeSetTime()">
+            <label>Set time</label>
+            <input name="time_button" type="submit" value="Set">
+            <select class="select_minute" name="select_minute" id="select_minute">
+                {% for n in range(0,60, 5) %}
+                <option value="{{n}}">{{n}}</option>
+                {% endfor %}
+            </select>
+            <select class="select_hour" name="select_hour" id="select_hour">
+                {% for n in range(8,18) %}
+                <option value="{{n}}"> {{n}} </option>
+                {% endfor %}
+            </select>
+        </form>
+        <form class="current_time_button" method="post">
+            <input name="current_time_button" type="submit" value="Current Time" onclick="setCurrentTime()">
+        </form>
+    </ul>
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+    <footer style="overflow: hidden;">
+        <p style="float: right;margin-right:10px;"><a href="mailto:emil.sitell@gmail.com">Contact</a> the developer or report bug/incorrect classroom data</p>
+        <p style="float: left;margin-left:10px;">Not officially affiliated with Skola24</p>
+    </footer>
+</body>
+<script type="text/javascript">
+    function GetClock(){
+        var d=new Date();
+        var nhour=d.getHours(),nmin=d.getMinutes(),nsec=d.getSeconds();
+        if(nmin<=9) nmin="0"+nmin;
+        if(nsec<=9) nsec="0"+nsec;
+
+        var clocktext=""+nhour+":"+nmin+":"+nsec+"";
+        document.getElementById('clockbox').innerHTML=clocktext;
+    }
+
+    GetClock();
+    setInterval(GetClock,1000);
+</script>
+<!--
+<script type="text/javascript">
+  document.getElementByID('select_minute').value = "<?php echo $_GET['select_minute'];?>";
+</script>
+-->
+<script type="text/javascript">
+function storeSetTime() {
+var hour = document.getElementById("select_hour").value;
+var minute = document.getElementById("select_minute").value;
+sessionStorage.setItem("setTime", hour + ":" + minute);
+}
+function setMenuTime() {
+    var hour_minute = sessionStorage.getItem("setTime").split(":");
+    var hour = hour_minute[0];
+    var minute = hour_minute[1];
+
+    console.log("set:" + hour + ", " + minute);
+
+    document.getElementById("select_hour").value = hour;
+    document.getElementById("select_minute").value = minute;
+}
+function setCurrentTime() {
+    sessionStorage.setItem("setTime", "Current");
+    return "Current";
+}
+</script>
+</html>
