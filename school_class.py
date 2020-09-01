@@ -1,12 +1,14 @@
-import schedule_extractor
 import pickle
 import time
-import school_cache
-import get_date_times
+from itertools import islice
 from multiprocessing.pool import ThreadPool
+
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from itertools import islice
+
+import get_date_times
+import schedule_extractor
+import school_cache
 
 
 class School:
@@ -16,16 +18,12 @@ class School:
         self.update_room_schedules()
 
     def empty_rooms(self, current_time):
-        '''
-        Returns all the empty rooms at the time and for how long
-
-        :return: list of tuples
-        '''
+        """Returns all the empty rooms at the time and for how long"""
 
         empty_rooms_list = []
 
         for room in self.rooms:
-            time_until_occupied = room.time_until_occupied(get_date_times.day_of_week(),current_time)
+            time_until_occupied = room.time_until_occupied(get_date_times.day_of_week(), current_time)
 
             if time_until_occupied > 0:
                 empty_rooms_list.append((room, time_until_occupied))
@@ -33,11 +31,8 @@ class School:
         return empty_rooms_list
 
     def update_room_schedules(self):
-        '''
-        Sets all rooms schedule to current week
+        """Sets all schedules to current"""
 
-        :return:
-        '''
         print("started schedule update for", self.name)
 
         threads = 8
@@ -47,10 +42,11 @@ class School:
             print("Starting", rooms_chunk[0].name, "->", rooms_chunk[-1].name)
 
             # This is left to catch which error occurs
-            if True:
+            try:
                 pool = ThreadPool(threads)
 
-                paired_arguments = [(school_name, room_name) for school_name, room_name in zip([self.name for i in range(len(rooms_chunk))], rooms_chunk)]
+                paired_arguments = [(school_name, room_name) for school_name, room_name in
+                                    zip([self.name for i in range(len(rooms_chunk))], rooms_chunk)]
 
                 # Starmaps maps a list of arguments to a function
                 results = pool.starmap(schedule_extractor.extract_schedule, paired_arguments)
@@ -59,7 +55,7 @@ class School:
                     room.schedule = result
 
                 print("Finished", rooms_chunk[0].name, "->", rooms_chunk[-1].name)
-            else:
+            except:
                 print("Failed", rooms_chunk[0].name, "->", rooms_chunk[-1].name)
 
     def read_rooms_file(self):
@@ -78,11 +74,9 @@ class School:
     def print_rooms_schedule(self):
         for room in self.rooms:
             print()
-            print("Room:",room.name)
+            print("Room:", room.name)
             for day, times in room.schedule.items():
                 if len(times) == 0:
-                    #print(day)
-                    #print("No bookings")
                     continue
                 else:
                     print(day)
@@ -99,7 +93,7 @@ class Room:
 
     def time_until_occupied(self, day, current_time):
         """
-        :param
+        :param day: string, 0-4 index of day
         :param current_time: date and time string in hh:mm format
         :return: time in string hh:mm format
         """
@@ -155,24 +149,24 @@ def read_schools(rooms_school_file):
 
         return schools_list
 
+
 if __name__ == "__main__":
     start_time = time.time()
 
     to_save = (read_schools("rooms_by_school_file"))
 
-    #to_save = ["Rosendalsgymnasiet"]
+    # to_save = ["Rosendalsgymnasiet"]
 
     my_pool = ThreadPool(1)
 
     schools = my_pool.map(School, to_save)
-
 
     cache = school_cache.SchoolCache("saved_schools_week_" + str(get_date_times.get_week()))
 
     time_saving = time.time()
     cache.save_schools(schools)
     print("Saving took", round(time.time() - time_saving, 2), "seconds")
-    #
+
     # print("testing cache")
     total_rooms = 0
     for school in cache.load_schools():

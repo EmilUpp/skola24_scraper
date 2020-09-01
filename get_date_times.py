@@ -1,9 +1,11 @@
 import datetime
 import time
 
+
 def today_to_date():
     """Converts todays date to a tuple"""
-    return datetime.date.today().year, datetime.date.today().month,datetime.date.today().day
+    return datetime.date.today().year, datetime.date.today().month, datetime.date.today().day
+
 
 def get_week(date=today_to_date()):
     """Returns the weeknumber for the given date, defaults to today"""
@@ -28,6 +30,6 @@ def time_stamp_to_minutes(time_stamp):
 
 if __name__ == "__main__":
     current_time_to_time_stamp()
-    #day_of_week()
-    #print(today_to_date())
-    #print(get_week(today_to_date()))
+    # day_of_week()
+    # print(today_to_date())
+    # print(get_week(today_to_date()))

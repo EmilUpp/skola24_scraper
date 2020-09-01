@@ -4,6 +4,7 @@ import pickle
 def write_to_text_file(d, file_path):
     """
     Writes the dict to a file in a more readable format (debug mostly)
+    :param file_path: filepath, where to write
     :param d: dictonary
     :return:
     """
@@ -18,8 +19,9 @@ def write_to_text_file(d, file_path):
 
     return True
 
+
 if __name__ == "__main__":
-    to_pickle_file = open("rooms_by_school_file","rb")
+    to_pickle_file = open("rooms_by_school_file", "rb")
     rooms_by_school_dict = pickle.load(to_pickle_file)
 
     for key, rooms in rooms_by_school_dict.items():

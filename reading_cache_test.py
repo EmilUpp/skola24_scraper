@@ -1,12 +1,14 @@
-import school_cache
 import get_date_times
 import schedule_extractor
+import school_cache
 
 debug_set_time = get_date_times.current_time_to_time_stamp()
 
+
 def time_until_occupied(room, day, current_time):
     """
-    :param
+    :param day: string, 0-4 index of day
+    :param room: room object
     :param current_time: date and time string in hh:mm format
     :return: time in string hh:mm format
     """
@@ -14,12 +16,14 @@ def time_until_occupied(room, day, current_time):
     try:
         for index, time_stamp_pairs in enumerate(room.schedule[day]):
             if schedule_extractor.is_between(current_time, time_stamp_pairs):
-                return -get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(current_time, time_stamp_pairs[1]))
+                return -get_date_times.time_stamp_to_minutes(
+                    schedule_extractor.time_between(current_time, time_stamp_pairs[1]))
 
             if schedule_extractor.is_before(current_time, time_stamp_pairs[0]):
-                return get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(current_time, time_stamp_pairs[0]))
+                return get_date_times.time_stamp_to_minutes(
+                    schedule_extractor.time_between(current_time, time_stamp_pairs[0]))
 
-            #if time_stamp_pairs == room.schedule[day][-1] and not schedule_extractor.is_before(current_time, time_stamp_pairs[1]):
+            # if time_stamp_pairs == room.schedule[day][-1] and not schedule_extractor.is_before(current_time, time_stamp_pairs[1]):
             #    return get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(current_time, "17:00"))
 
         if len(room.schedule[day]) == 0:
@@ -31,11 +35,11 @@ def time_until_occupied(room, day, current_time):
 
 
 def empty_rooms(school, set_time):
-    '''
+    """
     Returns all the empty rooms at the time and for how long
 
     :return: 2 lists of tuples
-    '''
+    """
 
     empty_rooms_list = []
     occupied_rooms_list = []
@@ -59,13 +63,13 @@ def sort_tuples(list_of_tuple, reverse=True):
 
 cache = school_cache.SchoolCache("saved_schools_week_" + str(get_date_times.get_week()))
 
+
 def empty_rooms_in_school(school_name, set_time=get_date_times.current_time_to_time_stamp()):
     school = cache.get_school(school_name)
 
     # If school wasn't found
     if not school:
         return [], []
-
 
     # Gets and sorts all empty rooms
     empty, occupied = empty_rooms(school, set_time)
@@ -83,10 +87,12 @@ def empty_rooms_in_school(school_name, set_time=get_date_times.current_time_to_t
         if room[0] == get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(set_time, "17:00")):
             result_result.append(str(room[1]) + " " * (10 - len(room[1])) + "unbooked")
         else:
-            result_result.append(str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + "minutes")
+            result_result.append(
+                str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + "minutes")
 
     for room in occupied:
-        occupied_result.append(str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + " minutes")
+        occupied_result.append(
+            str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + " minutes")
 
     return result_result, occupied_result
 
@@ -96,8 +102,8 @@ if __name__ == "__main__":
     school = cache.get_school("Rosendalsgymnasiet")
     print("Empty rooms at", school.name)
     print()
-    empty, occupied = empty_rooms(school)
+    empty, occupied = empty_rooms(school, debug_set_time)
     empty = sort_tuples(empty)
-    print("Room:", " "*4, "Time left:")
+    print("Room:", " " * 4, "Time left:")
     for each in empty:
-        print(each[1], " " * (9 - len(each[1])),each[0], "minutes")
+        print(each[1], " " * (9 - len(each[1])), each[0], "minutes")

@@ -1,9 +1,13 @@
-from selenium import webdriver
+import os
+import pickle
 import time
-import pickle, os
-import check_differences
 from itertools import islice
 from multiprocessing.pool import ThreadPool
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+
+import check_differences
 
 root = "https://web.skola24.se/timetable/timetable-viewer/uppsala.skola24.se/"
 
@@ -19,7 +23,7 @@ def get_schools(headless=True):
         # Makes the window headless
         options = webdriver.ChromeOptions()
 
-        if (headless):
+        if headless:
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
 
@@ -64,6 +68,7 @@ def get_schools(headless=True):
 def get_rooms(school_name, headless=True):
     """
     Reads all the rooms int the given school from the the skola24 website
+    :param headless: bool, whether it should open in background or not
     :param school_name: string with school name
     :return: list of all the rooms
     """
@@ -110,7 +115,7 @@ def get_rooms(school_name, headless=True):
                     for room in rooms:
                         # Gets the text on the object
                         room_list.append(room.get_attribute('data-text'))
-            except:
+            except NoSuchElementException:
                 pass
 
     print("")

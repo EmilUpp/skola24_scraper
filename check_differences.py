@@ -1,7 +1,7 @@
-import pickle
 import os
-import time
+import pickle
 import stat
+import time
 
 
 def difference_schools_room(original_file, new_file):
@@ -40,10 +40,10 @@ def difference_schools_room(original_file, new_file):
                 if room not in original_dict[school]:
                     added_rooms += 1
 
-
     print("Comparing difference between files:")
     print()
-    print(original_file, " " * abs(len(original_file) - len(new_file) + 1),"    last modified", last_modified(original_file))
+    print(original_file, " " * abs(len(original_file) - len(new_file) + 1), "    last modified",
+          last_modified(original_file))
     print(new_file, "    last modified", last_modified(new_file))
     print()
     print()
@@ -60,6 +60,7 @@ def last_modified(file_path):
     modification_time = time.ctime(file_stats_obj[stat.ST_MTIME])
 
     return modification_time
+
 
 if __name__ == "__main__":
     difference_schools_room("rooms_by_school_file", "rooms_by_school_file_test")

@@ -7,44 +7,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body onload="setMenuTime()">
-    <div class="page-header" style="overflow: hidden;">
-        <h1 style="float: left;margin-left: 40%;">Skola24 - Tomma Rum</h1>
-        <h1 style="float: right;margin-right:10px;vertical-align: top;">Time: <span id ="clockbox"></span></h1>
-    </div>
-    <ul class="sidebar">
-        <li><a href="http://127.0.0.1:5000" id="pickPage">Pick new school</a></li>
-        <li><a href="http://127.0.0.1:5000/about" id="aboutPage">About</a></li>
-        <li><a href="http://127.0.0.1:5000/contact" id="contactPage">Contact</a></li>
-        <form class="time_set" method="post" onsubmit="return storeSetTime()">
-            <label>Set time</label>
-            <input name="time_button" type="submit" value="Set">
-            <select class="select_minute" name="select_minute" id="select_minute">
-                {% for n in range(0,60, 5) %}
-                <option value="{{n}}">{{n}}</option>
-                {% endfor %}
-            </select>
-            <select class="select_hour" name="select_hour" id="select_hour">
-                {% for n in range(8,18) %}
-                <option value="{{n}}"> {{n}} </option>
-                {% endfor %}
-            </select>
-        </form>
-        <form class="current_time_button" method="post">
-            <input name="current_time_button" type="submit" value="Current Time" onclick="setCurrentTime()">
-        </form>
-    </ul>
-    <div class="content container">
-        <div class="row">
-            <div class="col-md-8">
+<div class="page-header" style="overflow: hidden;">
+    <h1 style="float: left;margin-left: 40%;">Skola24 - Tomma Rum</h1>
+    <h1 style="float: right;margin-right:10px;vertical-align: top;">Time: <span id="clockbox"></span></h1>
+</div>
+<ul class="sidebar">
+    <li><a href="http://127.0.0.1:5000" id="pickPage">Pick new school</a></li>
+    <li><a href="http://127.0.0.1:5000/about" id="aboutPage">About</a></li>
+    <li><a href="http://127.0.0.1:5000/contact" id="contactPage">Contact</a></li>
+    <form class="time_set" method="post" onsubmit="return storeSetTime()">
+        <label>Set time</label>
+        <input name="time_button" type="submit" value="Set">
+        <select class="select_minute" name="select_minute" id="select_minute">
+            {% for n in range(0,60, 5) %}
+            <option value="{{n}}">{{n}}</option>
+            {% endfor %}
+        </select>
+        <select class="select_hour" name="select_hour" id="select_hour">
+            {% for n in range(8,18) %}
+            <option value="{{n}}"> {{n}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <form class="current_time_button" method="post">
+        <input name="current_time_button" type="submit" value="Current Time" onclick="setCurrentTime()">
+    </form>
+</ul>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
             {% block content %}
             {% endblock %}
-            </div>
         </div>
     </div>
-    <footer style="overflow: hidden;">
-        <p style="float: right;margin-right:10px;"><a href="mailto:emil.sitell@gmail.com">Contact</a> the developer or report bug/incorrect classroom data</p>
-        <p style="float: left;margin-left:10px;">Not officially affiliated with Skola24</p>
-    </footer>
+</div>
+<footer style="overflow: hidden;">
+    <p style="float: right;margin-right:10px;"><a href="mailto:emil.sitell@gmail.com">Contact</a> the developer or
+        report bug/incorrect classroom data</p>
+    <p style="float: left;margin-left:10px;">Not officially affiliated with Skola24</p>
+</footer>
 </body>
 <script type="text/javascript">
     function GetClock(){
@@ -59,6 +60,7 @@
 
     GetClock();
     setInterval(GetClock,1000);
+
 </script>
 <!--
 <script type="text/javascript">
@@ -85,5 +87,6 @@ function setCurrentTime() {
     sessionStorage.setItem("setTime", "Current");
     return "Current";
 }
+
 </script>
 </html>

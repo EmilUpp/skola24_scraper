@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 {% if school != None %}
-    <h1>Empty rooms at: {{school}}</h1>
-    {% if room_list|length > 0 %}
-    <pre style="font-size:18px;color:darkgrey;" class="tab">Room:    Time vacant:</pre>
-    {% for room in room_list %}
-          <pre class="tab">{{ room }}</pre>
-    {% endfor %}
-    {% else %}
-        <pre class="tab">No empty rooms</pre>
-    {% endif %}
-    <h2>Rooms vacant in less than 30 minutes: {{occupied_rooms}}</h2>
-    {% if occupied_room_list|length > 0 %}
-    <pre style="font-size:18px;color:darkgrey;" class="tab">Room:    Time occupied:</pre>
-    {% for room in occupied_room_list %}
-          <pre class="tab">{{ room }}</pre>
-    {% endfor %}
-    {% endif %}
+<h1>Empty rooms at: {{school}}</h1>
+{% if room_list|length > 0 %}
+<pre style="font-size:18px;color:darkgrey;" class="tab">Room:    Time vacant:</pre>
+{% for room in room_list %}
+<pre class="tab">{{ room }}</pre>
+{% endfor %}
+{% else %}
+<pre class="tab">No empty rooms</pre>
+{% endif %}
+<h2>Rooms vacant in less than 30 minutes: {{occupied_rooms}}</h2>
+{% if occupied_room_list|length > 0 %}
+<pre style="font-size:18px;color:darkgrey;" class="tab">Room:    Time occupied:</pre>
+{% for room in occupied_room_list %}
+<pre class="tab">{{ room }}</pre>
+{% endfor %}
+{% endif %}
 {% endif %}
 {% endblock %}
