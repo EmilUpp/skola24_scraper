@@ -11,18 +11,24 @@ app.secret_key = 'test_password'
 @app.route('/school/<school>', methods=['GET', "POST"])
 def print_rooms(school=None, set_time="Current Time"):
     if request.method == "POST":
+        # Checks which button that was pressed
         if request.form.get("current_time_button"):
             selected_time = request.form["current_time_button"]
             session["set_time"] = selected_time
         else:
-            selected_time = str(request.form["select_hour"]) + ":" + str(request.form["select_minute"])
-            session["set_time"] = selected_time
+            try:
+                selected_time = str(request.form["select_hour"]) + ":" + str(request.form["select_minute"])
+                session["set_time"] = selected_time
+            except KeyError:
+                pass
 
+    # Saves the time set to session
     try:
         set_time = session["set_time"]
     except KeyError:
         app.logger.info("error no set time")
 
+    # If school is selected
     if school is not None:
         if set_time != "Current Time":
             app.logger.info("set: " + session["set_time"])
@@ -42,15 +48,13 @@ def print_rooms(school=None, set_time="Current Time"):
 def select_school():
     school = None
     if request.method == "POST":
+        # Make sure it's the right form
         try:
             school = str(request.form["school"])
         except KeyError:
             pass
 
     if school is not None:
-        if school not in [x.name for x in reading_cache_test.cache.load_schools()]:
-            return render_template("enter_school_dropdown_extended.html", error_message=school)
-
         return redirect("/school/" + school)
 
     return render_template("enter_school_dropdown_extended.html",

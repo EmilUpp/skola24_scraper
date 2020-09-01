@@ -24,10 +24,10 @@ if __name__ == "__main__":
     to_pickle_file = open("rooms_by_school_file", "rb")
     rooms_by_school_dict = pickle.load(to_pickle_file)
 
-    for key, rooms in rooms_by_school_dict.items():
-        print(key + ":", len(rooms), "rooms")
-        for room in rooms:
-            print("    ", room)
+    for test_key, test_rooms in rooms_by_school_dict.items():
+        print(test_key + ":", len(test_rooms), "rooms")
+        for test_room in test_rooms:
+            print("    ", test_room)
         print()
 
     write_to_text_file(rooms_by_school_dict, "rooms_by_school_pretty")

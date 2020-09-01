@@ -3,9 +3,6 @@ import time
 from itertools import islice
 from multiprocessing.pool import ThreadPool
 
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 import get_date_times
 import schedule_extractor
 import school_cache
@@ -22,11 +19,11 @@ class School:
 
         empty_rooms_list = []
 
-        for room in self.rooms:
-            time_until_occupied = room.time_until_occupied(get_date_times.day_of_week(), current_time)
+        for each in self.rooms:
+            time_until_occupied = each.time_until_occupied(get_date_times.day_of_week(), current_time)
 
             if time_until_occupied > 0:
-                empty_rooms_list.append((room, time_until_occupied))
+                empty_rooms_list.append((each, time_until_occupied))
 
         return empty_rooms_list
 
@@ -106,35 +103,6 @@ class Room:
 
         return 0
 
-    def extract_schedule(self):
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-
-        driver.get(schedule_extractor.create_url(self.school, self.name))
-
-        time.sleep(8)
-
-        results = driver.find_element_by_tag_name("svg")
-
-        raw_timestamps = []
-
-        # Get the size of the schedule
-        width, height = results.get_attribute("width"), results.get_attribute("height")
-
-        # Finds all text in the schedule
-        for item in results.find_elements_by_tag_name('text'):
-            if schedule_extractor.is_timestamp(item.text):
-                pos = round(int(item.get_attribute("x")) / int(width), 1)
-
-                raw_timestamps.append((pos, item.text))
-
-        split_by_day_schedule = schedule_extractor.split_days(raw_timestamps)
-
-        split_by_day_paired = schedule_extractor.pair_occupied_times(split_by_day_schedule)
-
-        driver.quit()
-
-        return split_by_day_paired
-
 
 def chunk(it, size):
     it = iter(it)
@@ -170,7 +138,7 @@ if __name__ == "__main__":
     # print("testing cache")
     total_rooms = 0
     for school in cache.load_schools():
-        for room in school.rooms:
+        for each in school.rooms:
             total_rooms += 1
 
     print()

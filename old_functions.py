@@ -59,11 +59,11 @@ def split_days_back(raw_timestamps):
 
 
 def pair_timestamps(split_by_day):
-    '''
+    """
     Pairs all times where the room is free between
     :param split_by_day:
     :return:
-    '''
+    """
 
     # TODO Pair occupied times
 

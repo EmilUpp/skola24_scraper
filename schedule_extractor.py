@@ -2,11 +2,12 @@ import string
 import time
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 import get_date_times
 
@@ -50,7 +51,11 @@ def extract_schedule(school, room, week=get_date_times.get_week(), headless=True
         executable_path = r"E:\HämtadeFiler\chromedriver_win32_84\chromedriver.exe"
 
         # Innit he driver
-        driver = webdriver.Chrome(executable_path, options=options)
+        try:
+            driver = webdriver.Chrome(executable_path, options=options)
+        except WebDriverException:
+            # Downloads the driver if none is found
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     except PermissionError:
         print("Permission Error at:", school, room.name)
         return False
@@ -200,9 +205,9 @@ def pair_occupied_times(split_by_day):
 
     for day_index, day in enumerate(split_by_day):
         paired_times = []
-        for time in day[::2]:
+        for time_stamp in day[::2]:
             try:
-                paired_times.append((time, day[day.index(time) + 1]))
+                paired_times.append((time_stamp, day[day.index(time_stamp) + 1]))
             except IndexError:
                 pass
         schedule_dict[str(day_index)] = paired_times
@@ -280,7 +285,7 @@ class RoomDebugTest:
 
 if __name__ == "__main__":
     start_time = time.time()
-    schedule = extract_schedule("Rosendalsgymnasiet", RoomDebugTest("Rosendalsgymnasiet", "B408", None), 36)
+    test_schedule = extract_schedule("Rosendalsgymnasiet", RoomDebugTest("Rosendalsgymnasiet", "B408", None), 36)
 
     # driver.quit()
 

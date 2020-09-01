@@ -1,0 +1,4 @@
+flask
+dill
+selenium
+webdriver_manager

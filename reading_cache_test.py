@@ -23,9 +23,6 @@ def time_until_occupied(room, day, current_time):
                 return get_date_times.time_stamp_to_minutes(
                     schedule_extractor.time_between(current_time, time_stamp_pairs[0]))
 
-            # if time_stamp_pairs == room.schedule[day][-1] and not schedule_extractor.is_before(current_time, time_stamp_pairs[1]):
-            #    return get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(current_time, "17:00"))
-
         if len(room.schedule[day]) == 0:
             return get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(current_time, "17:00"))
         else:
@@ -99,11 +96,11 @@ def empty_rooms_in_school(school_name, set_time=get_date_times.current_time_to_t
 
 if __name__ == "__main__":
     print(debug_set_time)
-    school = cache.get_school("Rosendalsgymnasiet")
-    print("Empty rooms at", school.name)
+    test_school = cache.get_school("Rosendalsgymnasiet")
+    print("Empty rooms at", test_school.name)
     print()
-    empty, occupied = empty_rooms(school, debug_set_time)
-    empty = sort_tuples(empty)
+    test_empty, test_occupied = empty_rooms(test_school, debug_set_time)
+    test_empty = sort_tuples(test_empty)
     print("Room:", " " * 4, "Time left:")
-    for each in empty:
+    for each in test_empty:
         print(each[1], " " * (9 - len(each[1])), each[0], "minutes")
