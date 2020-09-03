@@ -168,10 +168,10 @@ def save_rooms_by_school(threads=8):
     if True:
         pickle.dump(rooms_by_school_dict, open("temp_rooms_by_school_file", "wb"))
 
-        check_differences.difference_schools_room("rooms_by_school_file", "temp_rooms_by_school_file")
+        check_differences.difference_schools_room("saved_files/rooms_by_school_file", "temp_rooms_by_school_file")
         os.remove("temp_rooms_by_school_file")
 
-        pickle.dump(rooms_by_school_dict, open("rooms_by_school_file", "wb"))
+        pickle.dump(rooms_by_school_dict, open("saved_files/rooms_by_school_file", "wb"))
         return True
     else:
         return False

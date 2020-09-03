@@ -63,4 +63,4 @@ def last_modified(file_path):
 
 
 if __name__ == "__main__":
-    difference_schools_room("rooms_by_school_file", "rooms_by_school_file_test")
+    difference_schools_room("saved_files/rooms_by_school_file", "rooms_by_school_file_test")

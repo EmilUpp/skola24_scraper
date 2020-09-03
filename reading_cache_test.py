@@ -42,7 +42,7 @@ def empty_rooms(school, set_time):
     occupied_rooms_list = []
 
     for room in school.rooms:
-        time_left = time_until_occupied(room, "2", set_time)
+        time_left = time_until_occupied(room, get_date_times.day_of_week(), set_time)
         if len(room.name) >= 10:
             room.name = room.name[:7] + ".."
         if time_left > 0:
@@ -58,7 +58,7 @@ def sort_tuples(list_of_tuple, reverse=True):
     return list_of_tuple
 
 
-cache = school_cache.SchoolCache("saved_schools_week_" + str(get_date_times.get_week()))
+cache = school_cache.SchoolCache("saved_files/saved_schools_week_" + str(get_date_times.get_week()))
 
 
 def empty_rooms_in_school(school_name, set_time=get_date_times.current_time_to_time_stamp()):

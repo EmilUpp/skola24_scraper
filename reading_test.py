@@ -21,7 +21,7 @@ def write_to_text_file(d, file_path):
 
 
 if __name__ == "__main__":
-    to_pickle_file = open("rooms_by_school_file", "rb")
+    to_pickle_file = open("saved_files/rooms_by_school_file", "rb")
     rooms_by_school_dict = pickle.load(to_pickle_file)
 
     for test_key, test_rooms in rooms_by_school_dict.items():
@@ -29,5 +29,4 @@ if __name__ == "__main__":
         for test_room in test_rooms:
             print("    ", test_room)
         print()
-
-    write_to_text_file(rooms_by_school_dict, "rooms_by_school_pretty")
+    write_to_text_file(rooms_by_school_dict, "saved_files/rooms_by_school_pretty")

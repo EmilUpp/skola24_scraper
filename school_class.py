@@ -56,7 +56,7 @@ class School:
                 print("Failed", rooms_chunk[0].name, "->", rooms_chunk[-1].name)
 
     def read_rooms_file(self):
-        with open("rooms_by_school_file", "rb") as f:
+        with open("saved_files/rooms_by_school_file", "rb") as f:
             rooms_by_school_dict = pickle.load(f)
 
             room_names = rooms_by_school_dict[self.name]
@@ -121,7 +121,7 @@ def read_schools(rooms_school_file):
 if __name__ == "__main__":
     start_time = time.time()
 
-    to_save = (read_schools("rooms_by_school_file"))
+    to_save = (read_schools("saved_files/rooms_by_school_file"))
 
     # to_save = ["Rosendalsgymnasiet"]
 
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 
     schools = my_pool.map(School, to_save)
 
-    cache = school_cache.SchoolCache("saved_schools_week_" + str(get_date_times.get_week()))
+    cache = school_cache.SchoolCache("saved_files/saved_schools_week_" + str(get_date_times.get_week()))
 
     time_saving = time.time()
     cache.save_schools(schools)

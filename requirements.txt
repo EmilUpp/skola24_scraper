@@ -1,4 +1,3 @@
-flask
-dill
-selenium
-webdriver_manager
+Flask~=1.1.2
+dill~=0.3.2
+selenium~=3.141.0
