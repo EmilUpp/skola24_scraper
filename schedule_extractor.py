@@ -1,11 +1,15 @@
-from selenium import webdriver
-import time, get_date_times
 import string
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+import time
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+
+import get_date_times
 
 # The relative position of each day
 # Values are hard coded from experimenting with their positions
@@ -47,7 +51,11 @@ def extract_schedule(school, room, week=get_date_times.get_week(), headless=True
         executable_path = r"E:\HämtadeFiler\chromedriver_win32_84\chromedriver.exe"
 
         # Innit he driver
-        driver = webdriver.Chrome(executable_path,options=options)
+        try:
+            driver = webdriver.Chrome(executable_path, options=options)
+        except WebDriverException:
+            # Downloads the driver if none is found
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     except PermissionError:
         print("Permission Error at:", school, room.name)
         return False
@@ -55,50 +63,43 @@ def extract_schedule(school, room, week=get_date_times.get_week(), headless=True
     room_name = room.name
     driver.get(create_url(school, room_name))
 
-    # Makes sure the sites loads properly
-    #time.sleep(8)
+    # Select the room
     try:
-        button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[5]/div/div/input')))     # Enters the room name in the field
+        # Enters the room name in the field and waits until load
+        button = WebDriverWait(driver, 10).until(ec.presence_of_element_located(
+            (By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[5]/div/div/input')))
         button.click()
         time.sleep(3)
         button.send_keys(room_name)
         time.sleep(3)
         button.send_keys(Keys.ENTER)
     except TimeoutException:
-        #driver.save_screenshot(room_name + "button_test_save_screen_shot.png")
         print("Button timed out", room_name)
         empty_split_list = {'0': [], '1': [], '2': [], '3': [], '4': []}
         driver.quit()
         return empty_split_list
 
-    # try:
-    #     # Loads the rooms page
-    #     driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[5]/div/div/input').send_keys(Keys.ENTER)    # Presses enter to the field
-    # except NoSuchElementException:
-    #     print("Found no room button at:", room_name)
-    #     empty_split_list = {'0': [], '1': [], '2': [], '3': [], '4': []}
-    #     driver.quit()
-    #     return empty_split_list
-
     # Sets week if not current
-    if (week != get_date_times.get_week()):
+    if week != get_date_times.get_week():
         week_button_xpath = '/html/body/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/div/input'
-        driver.find_element_by_xpath(week_button_xpath).clear()    # Presses enter to the field
+        driver.find_element_by_xpath(week_button_xpath).clear()  # Presses enter to the field
         time.sleep(2)
-        driver.find_element_by_xpath(week_button_xpath).send_keys("v." + str(week) + ", 2020")     # Enters the room name in the field
+        # Enters the room name in the field
+        driver.find_element_by_xpath(week_button_xpath).send_keys("v." + str(week) + ", 2020")
         time.sleep(2)
-        driver.find_element_by_xpath(week_button_xpath).send_keys(Keys.ENTER)       # Presses enter to the field
+        # Presses enter to the field
+        driver.find_element_by_xpath(week_button_xpath).send_keys(Keys.ENTER)
         time.sleep(2)
 
     try:
-        results = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "svg")))
+        results = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.TAG_NAME, "svg")))
     except NoSuchElementException:
         print("Found no svg at:", room_name)
         empty_split_list = {'0': [], '1': [], '2': [], '3': [], '4': []}
         driver.quit()
         return empty_split_list
     except TimeoutException:
-        #driver.save_screenshot(room_name + "_svg_test_save_screen_shot.png")
+        # driver.save_screenshot(room_name + "_svg_test_save_screen_shot.png")
         print("Sessions timed out", room_name)
         empty_split_list = {'0': [], '1': [], '2': [], '3': [], '4': []}
         driver.quit()
@@ -204,9 +205,9 @@ def pair_occupied_times(split_by_day):
 
     for day_index, day in enumerate(split_by_day):
         paired_times = []
-        for time in day[::2]:
+        for time_stamp in day[::2]:
             try:
-                paired_times.append((time, day[day.index(time) + 1]))
+                paired_times.append((time_stamp, day[day.index(time_stamp) + 1]))
             except IndexError:
                 pass
         schedule_dict[str(day_index)] = paired_times
@@ -281,9 +282,10 @@ class RoomDebugTest:
         self.url = create_url(school, name)
         self.schedule = schedule
 
+
 if __name__ == "__main__":
     start_time = time.time()
-    schedule = extract_schedule("Rosendalsgymnasiet", RoomDebugTest("Rosendalsgymnasiet", "B408", None), 36)
+    test_schedule = extract_schedule("Rosendalsgymnasiet", RoomDebugTest("Rosendalsgymnasiet", "B408", None), 36)
 
     # driver.quit()
 

@@ -19,8 +19,9 @@ def split_days_back(raw_timestamps):
 
     return split_list
 
+
 def split_days_back(raw_timestamps):
-    #TODO fix when no lessons, add empty days that gets filled
+    # TODO fix when no lessons, add empty days that gets filled
     split_list = []
 
     day = []
@@ -34,7 +35,7 @@ def split_days_back(raw_timestamps):
             day.append(time_stamp)
             prior_time = time_stamp
         else:
-            split_list.append(day)             # Adds the day to the list
+            split_list.append(day)  # Adds the day to the list
             prior_time = "00:00"
             day = [time_stamp]
 
@@ -56,12 +57,13 @@ def split_days_back(raw_timestamps):
 
     return split_list
 
+
 def pair_timestamps(split_by_day):
-    '''
+    """
     Pairs all times where the room is free between
     :param split_by_day:
     :return:
-    '''
+    """
 
     # TODO Pair occupied times
 
@@ -100,6 +102,7 @@ def pair_timestamps(split_by_day):
                     # pair_list.append((split_by_day[-1][-1], "23:59"))        # Fixes the last on the last day
 
     return schedule_dict
+
 
 def save_rooms_by_school2():
     """
