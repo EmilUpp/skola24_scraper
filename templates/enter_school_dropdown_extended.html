@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <form action="/" method="post">
-    <h1>Select School</h1>
+    <h1>Välj Skola</h1>
     <select class="school_select" name="school">
         {% for school in schools %}
         <option style="font-size:20;" value="{{school}}">{{school}}</option>
         {% endfor %}
     </select>
-    <input type="submit" name="school_button" value="Select School">
+    <input type="submit" name="school_button" value="Välj Skola">
 </form>
 {% endblock %}

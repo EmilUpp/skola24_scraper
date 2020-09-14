@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="60">
-    <title>Skola24 Empty Rooms</title>
+    <title>Skola24 Tomma Rum</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body onload="setMenuTime()">
 <div class="page-header" style="overflow: hidden;">
     <h1 style="float: left;margin-left: 40%;">Skola24 - Tomma Rum</h1>
-    <h1 style="float: right;margin-right:10px;vertical-align: top;">Time: <span id="clockbox"></span></h1>
+    <h1 style="float: right;margin-right:10px;vertical-align: top;">Tid: <span id="clockbox"></span></h1>
 </div>
 <ul class="sidebar">
-    <li><a href="http://127.0.0.1:5000" id="pickPage">Pick new school</a></li>
-    <li><a href="http://127.0.0.1:5000/about" id="aboutPage">About</a></li>
-    <li><a href="http://127.0.0.1:5000/contact" id="contactPage">Contact</a></li>
+    <li><a href="http://127.0.0.1:5000" id="pickPage">Välj ny skola</a></li>
+    <li><a href="http://127.0.0.1:5000/about" id="aboutPage">Om</a></li>
+    <li><a href="http://127.0.0.1:5000/contact" id="contactPage">Kontakt</a></li>
     <form class="time_set" method="post" onsubmit="return storeSetTime()">
-        <label>Set time</label>
-        <input name="time_button" type="submit" value="Set">
+        <label>Sätt tid</label>
+        <input name="time_button" type="submit" value="Välj">
         <select class="select_minute" name="select_minute" id="select_minute">
             {% for n in range(0,60, 5) %}
             <option value="{{n}}">{{n}}</option>
@@ -30,7 +30,7 @@
         </select>
     </form>
     <form class="current_time_button" method="post">
-        <input name="current_time_button" type="submit" value="Current Time" onclick="setCurrentTime()">
+        <input name="current_time_button" type="submit" value="Nuvarande Tid" onclick="setCurrentTime()">
     </form>
 </ul>
 <div class="content container">
@@ -42,9 +42,8 @@
     </div>
 </div>
 <footer style="overflow: hidden;">
-    <p style="float: right;margin-right:10px;"><a href="mailto:emil.sitell@gmail.com">Contact</a> the developer or
-        report bug/incorrect classroom data</p>
-    <p style="float: left;margin-left:10px;">Not officially affiliated with Skola24</p>
+    <p style="float: right;margin-right:10px;"><a href="mailto:emil.sitell@gmail.com">Kontakta</a> utvecklaren eller rappotera en bug eller inkorrekt data</p>
+    <p style="float: left;margin-left:10px;">Inte officiellt kopplad till Skola24</p>
 </footer>
 </body>
 <script type="text/javascript">

@@ -30,7 +30,7 @@ def print_rooms(school=None, set_time="Current Time"):
 
     # If school is selected
     if school is not None:
-        if set_time != "Current Time":
+        if set_time != "Nuvarande Tid":
             app.logger.info("set: " + session["set_time"])
             empty_rooms_to_print, occupied_rooms = reading_cache_test.empty_rooms_in_school(school, set_time)
         else:
