@@ -118,24 +118,25 @@ def read_schools(rooms_school_file):
         return schools_list
 
 
-if __name__ == "__main__":
+def create_schedule_file():
     start_time = time.time()
 
     to_save = (read_schools("saved_files/rooms_by_school_file"))
 
-    # to_save = ["Rosendalsgymnasiet"]
-
+    # Sets how many schools are calculated simultaneously
     my_pool = ThreadPool(1)
 
+    # Creates school objects
     schools = my_pool.map(School, to_save)
 
+    # Saves to cache
     cache = school_cache.SchoolCache("saved_files/saved_schools_week_" + str(get_date_times.get_week()))
 
     time_saving = time.time()
     cache.save_schools(schools)
     print("Saving took", round(time.time() - time_saving, 2), "seconds")
 
-    # print("testing cache")
+    # Count the rooms
     total_rooms = 0
     for school in cache.load_schools():
         for each in school.rooms:
@@ -147,3 +148,7 @@ if __name__ == "__main__":
     print()
     print("It took", round(time.time() - start_time), "seconds to complete update")
     print("Average room time:", round((time.time() - start_time) / total_rooms, 2), "seconds")
+
+
+if __name__ == "__main__":
+    create_schedule_file()
