@@ -165,16 +165,13 @@ def save_rooms_by_school(threads=8):
     print("---It took", round(time.time() - start_time, 1), "seconds to search and find all schools---")
     print()
 
-    if True:
-        pickle.dump(rooms_by_school_dict, open("temp_rooms_by_school_file", "wb"))
+    pickle.dump(rooms_by_school_dict, open("temp_rooms_by_school_file", "wb"))
 
-        check_differences.difference_schools_room("saved_files/rooms_by_school_file", "temp_rooms_by_school_file")
-        os.remove("temp_rooms_by_school_file")
+    check_differences.difference_schools_room("saved_files/rooms_by_school_file", "temp_rooms_by_school_file")
+    os.remove("temp_rooms_by_school_file")
 
-        pickle.dump(rooms_by_school_dict, open("saved_files/rooms_by_school_file", "wb"))
-        return True
-    else:
-        return False
+    pickle.dump(rooms_by_school_dict, open("saved_files/rooms_by_school_file", "wb"))
+    return True
 
 
 def chunk(it, size):

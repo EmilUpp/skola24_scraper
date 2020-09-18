@@ -14,21 +14,8 @@ class School:
         self.rooms = self.read_rooms_file()
         self.update_room_schedules()
 
-    def empty_rooms(self, current_time):
-        """Returns all the empty rooms at the time and for how long"""
-
-        empty_rooms_list = []
-
-        for each in self.rooms:
-            time_until_occupied = each.time_until_occupied(get_date_times.day_of_week(), current_time)
-
-            if time_until_occupied > 0:
-                empty_rooms_list.append((each, time_until_occupied))
-
-        return empty_rooms_list
-
     def update_room_schedules(self):
-        """Sets all schedules to current"""
+        """Sets all schedules to current week"""
 
         print("started schedule update for", self.name)
 
@@ -38,7 +25,6 @@ class School:
 
             print("Starting", rooms_chunk[0].name, "->", rooms_chunk[-1].name)
 
-            # This is left to catch which error occurs
             try:
                 pool = ThreadPool(threads)
 
@@ -82,26 +68,12 @@ class School:
 
 
 class Room:
+    """Class representing each room in school"""
     def __init__(self, school, name, schedule):
         self.school = school
         self.name = name
         self.url = schedule_extractor.create_url(school, name)
         self.schedule = schedule
-
-    def time_until_occupied(self, day, current_time):
-        """
-        :param day: string, 0-4 index of day
-        :param current_time: date and time string in hh:mm format
-        :return: time in string hh:mm format
-        """
-        for time_stamp in self.schedule[day]:
-            if not schedule_extractor.is_between(current_time, time_stamp):
-                print(schedule_extractor.time_between(current_time, time_stamp[0]))
-                return schedule_extractor.time_between(current_time, time_stamp[0])
-            else:
-                continue
-
-        return 0
 
 
 def chunk(it, size):
