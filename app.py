@@ -2,14 +2,14 @@ import socket
 
 from flask import Flask, render_template, request, redirect, session
 
-import reading_cache_test
+import reading_school_cache
 
 app = Flask(__name__)
 app.secret_key = 'test_password'
 
 
 @app.route('/school/<school>', methods=['GET', "POST"])
-def print_rooms(school=None, set_time="Current Time"):
+def print_rooms(school=None, set_time="Nuvarande Tid"):
     if request.method == "POST":
         # Checks which button that was pressed
         if request.form.get("current_time_button"):
@@ -32,10 +32,10 @@ def print_rooms(school=None, set_time="Current Time"):
     if school is not None:
         if set_time != "Nuvarande Tid":
             app.logger.info("set: " + session["set_time"])
-            empty_rooms_to_print, occupied_rooms = reading_cache_test.empty_rooms_in_school(school, set_time)
+            empty_rooms_to_print, occupied_rooms = reading_school_cache.empty_rooms_in_school(school, set_time)
         else:
             app.logger.info("Current time")
-            empty_rooms_to_print, occupied_rooms = reading_cache_test.empty_rooms_in_school(school)
+            empty_rooms_to_print, occupied_rooms = reading_school_cache.empty_rooms_in_school(school)
     else:
         empty_rooms_to_print = []
         occupied_rooms = []
@@ -58,7 +58,7 @@ def select_school():
         return redirect("/school/" + school)
 
     return render_template("enter_school_dropdown_extended.html",
-                           schools=[x.name for x in reading_cache_test.cache.load_schools()])
+                           schools=[x.name for x in reading_school_cache.cache.load_schools()])
 
 
 @app.route("/about", methods=["GET", "POST"])

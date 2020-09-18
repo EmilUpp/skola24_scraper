@@ -82,14 +82,14 @@ def empty_rooms_in_school(school_name, set_time=get_date_times.current_time_to_t
     # Sets the string to be shown on site
     for room in empty:
         if room[0] == get_date_times.time_stamp_to_minutes(schedule_extractor.time_between(set_time, "17:00")):
-            result_result.append(str(room[1]) + " " * (10 - len(room[1])) + "unbooked")
+            result_result.append(str(room[1]) + " " * (10 - len(room[1])) + "obokad")
         else:
             result_result.append(
-                str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + "minutes")
+                str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + "minuter")
 
     for room in occupied:
         occupied_result.append(
-            str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + " minutes")
+            str(room[1]) + " " * (10 - len(room[1])) + str(room[0]) + " " * (4 - len(str(room[0]))) + " minuter")
 
     return result_result, occupied_result
 
