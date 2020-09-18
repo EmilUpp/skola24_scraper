@@ -3,7 +3,8 @@ import dill
 
 class SchoolCache:
     """
-    A class for saving and loading schools and their associated rooms and schedule
+    A class for handling the saved school in dill format
+    Saves and loads school from the file
     """
 
     def __init__(self, save_file_name):
